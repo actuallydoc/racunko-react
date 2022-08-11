@@ -21,7 +21,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="dasboard" element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="about" element={<About />} />
         <Route path="*" element={<UnknownPage/>} />
     </Routes>
