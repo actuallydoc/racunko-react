@@ -2,8 +2,13 @@ import React from 'react';
 import BodyCard from "./BodyCard";
 import BodyImage from "./BodyImage";
 import UpperBody from "./UpperBody";
+import {useNavigate} from "react-router-dom";
 
 const BodyContent = () => {
+    const navigate = useNavigate()
+    const handleClick =() =>{
+        navigate('/signup')
+    }
     return(
         <div className={""}>
             <div>
@@ -18,8 +23,8 @@ const BodyContent = () => {
                     <div className={"object-center"}>
                         <BodyImage/>
                     </div>
-                    <div className={"ml-auto mr-auto text-slate-200 pt-4 m-2 text-center hover:scale-105 duration-150"}>
-                        <p className={"cursor-pointer bg-sky-400 border-1 rounded-lg p-1 pl-4 pr-4"}>Join</p>
+                    <div className={"ml-auto mr-auto text-slate-200 pt-3 text-center"}>
+                        <button onClick={handleClick} className={"cursor-pointer bg-sky-400 border-1 p-1 pl-3 pr-3 rounded-lg hover:scale-105 duration-150"}>Join</button>
                     </div>
                 </div>
             </div>

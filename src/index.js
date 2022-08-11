@@ -11,9 +11,11 @@ import Signup from './routes/Signup';
 import Dashboard from './routes/Dashboard';
 import About from './routes/About';
 import UnknownPage from './components/Page404/UnknownPage';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+
 <BrowserRouter>
     <Routes>
         <Route path="/" element={<App />} />
@@ -24,6 +26,7 @@ root.render(
         <Route path="*" element={<UnknownPage/>} />
     </Routes>
 </BrowserRouter>
+
 
   </React.StrictMode>
 );
