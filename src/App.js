@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import Navbar from "./components/Home/Navbar/Navbar";
+import React, {useEffect} from "react";
+import ToastNoti from './components/Home/Toast/ToatNoti'
+import BodyContent from "./components/Home/Body/BodyContent";
+import {toast} from "react-toastify";
+import Footer from './components/Home/Footer/Footer'
+export default function App() {
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    useEffect(() => {
+        toast("This website uses cookies to improve user experience!");
+
+    }, [])
+    return (
+        <div className={"h-screen flex flex-col"}>
+            <div>
+                <ToastNoti HideProgressBar={true}/>
+            </div>
+            <header>
+                <title>Računko Home</title>
+                <Navbar/>
+            </header>
+            <div>
+             <BodyContent/>
+            </div>
+            <div className={"bg-gray-800 bottom-0 h-4/6"}>
+                    <Footer/>
+            </div>
+
+        </div>
+    )
 }
-
-export default App;
