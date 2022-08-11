@@ -7,6 +7,7 @@ import Footer from './components/Home/Footer/Footer'
 import News from "./components/Home/News/News";
 import {Divider} from "@mui/material";
 import {useCookies} from "react-cookie";
+import Reviews from "./components/Home/Reviews/Reviews";
 export default function App() {
     const [cookies, setCookie] = useCookies();
 
@@ -37,8 +38,15 @@ export default function App() {
                 <Divider variant="middle"/>
             </div>
             <div>
+                <Reviews/>
+            </div>
+            <div>
+                <Divider variant="middle"/>
+            </div>
+            <div>
                 <News/>
             </div>
+
             <div className={"bg-gray-800 bottom-0 h-4/6"}>
                     <Footer/>
             </div>

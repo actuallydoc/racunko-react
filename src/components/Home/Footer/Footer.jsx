@@ -32,7 +32,7 @@ const Footer = () => {
                 <div className={"font-bold ml-auto mr-auto text-center pb-2"}>
                     <p>Social media</p>
                 </div>
-                <div className={"flex pl-3 space-x-2 underline"}>
+                <div className={"sm:flex pl-3 space-x-5 underline"}>
 
                         <SocialItem name={"Facebook"} link={"https://facebook.com/test"} img={"https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"} alt={"Fb link"} height={"20px"} width={"20px"}/>
 
