@@ -13,11 +13,14 @@ import {Tooltip} from "@mui/material";
 
 const Navbar = () => {
     const [modalIsOpen, setIsOpen] = useState(false);
-    const [cookies, setCookie] = useCookies();
+    const [cookies, setCookie, deleteCookies] = useCookies();
     const [state, setState] = useState(false);
     const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-    const handleChange = (event) => {
 
+    const handleMenu = (event) => {
+        const expression = event.currentTarget.innerText
+    }
+    const handleChange = (event) => {
         setState(event.target.checked);
         setCookie('theme',  event.target.checked, {path: '/'});
 
@@ -29,9 +32,6 @@ const Navbar = () => {
     const openModal = () => {
         setIsOpen(true);
     }
-    useEffect(() => {
-
-    }, [modalIsOpen])
 
     useEffect(() => {
         console.log(cookies)
@@ -43,14 +43,13 @@ const Navbar = () => {
         }
     }, [])
     return (
-        <div className={"flex p-2 text-xl text-slate-200 drop-shadow-2xl bg-gradient-to-r from-sky-500 to-indigo-500"}>
-
+        <div className={"flex pt-3 text-xl text-slate-200 justify-center text-center  drop-shadow-xl bg-gradient-to-r from-sky-500 to-indigo-500"}>
             <div className={"flex space-x-3"}>
-                <div className={"mx-2 ml-5"}>
+                <div className={"mx-2 ml-5 py-2"}>
                     <Navitem name={"Home"} path={"/"} />
                 </div>
             </div>
-            <div className={"ml-auto justify-center text-center"}>
+            <div className={"ml-auto"}>
                 <Switch
                     label="theme"
                     checked={state }
@@ -58,11 +57,11 @@ const Navbar = () => {
                     onChange={handleChange}
                 />
             </div>
-            <div className={"flex justify-center text-center mx-5"}>
-                <div className={"flex space-x-3 cursor-pointer"}>
+            <div className={"flex justify-center text-center mx-5 "}>
+                <div className={"flex space-x-3 cursor-pointer justify-center text-center"}>
                     <div>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{ mt: '55px' }}
                             id="menu-appbar"
                             anchorEl={modalIsOpen}
                             anchorOrigin={{
@@ -78,25 +77,23 @@ const Navbar = () => {
                             onClose={closeModal}
                         >
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={closeModal}>
+                                <MenuItem key={setting} onClick={handleMenu}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
                         <div className={"flex"}>
-                            <div>
+                            <div className={""}>
                                 <Tooltip title="Open settings">
-                                    <IconButton onClick={()=> setIsOpen(!modalIsOpen)} sx={{ p: 0 }}>
-                                        <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-
+                                    <IconButton onClick={()=> setIsOpen(!modalIsOpen)}>
+                                        <Avatar alt="User" src="https://material-ui.com/static/images/avatar/1.jpg" />
                                     </IconButton>
                                 </Tooltip>
                           </div>
-                            <div>
+                            <div className={""}>
                                 {modalIsOpen ? <ArrowDownwardIcon onClick={openModal}/> : <ArrowUpwardIcon/>}
                             </div>
                         </div>
-
 
                     </div>
 
