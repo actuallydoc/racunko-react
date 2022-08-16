@@ -1,16 +1,21 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import TableItem from './TableItem';
-const TableBody = () => {
+const TableBody = ({company}) => {
+
+    useEffect(() => {
+        console.log("TableBody");
+        console.log(company);
+    }, [])
     return (
         <div className={"flex"}>
-            <div className={"flex-col"}>
-                <div className={""}>
-                    <TableItem InvoiceNumber={"1"} Amount={"30"} Partner={"TBS TEAM 24 D.O.O"} Status={"Not paid"} invoiceDate={"12.22.2022"} paymentDate={"12.15.2022"} serviceDate={"10.02.2022"} Currency={"$"}/>
+            <div className={""}>
+                    {company.length === 0 || company === undefined ? <h1>Table items</h1>:
+                        <div className={"flex"}>
+                            <div className={"flex font-mono font-bold text-center border-4 rounded-lg bg-slate-200"}>
+                                <h1 className={"justify-center"}>You dont have a company!. Create one in the Company Tab.</h1>
+                            </div>
+                        </div>}
                 </div>
-                <div className={""} >
-                    <TableItem InvoiceNumber={"2"} Amount={"30"} Partner={"TBS TEAM 24 D.O.O"} Status={"Not paid"} invoiceDate={"12.22.2022"} paymentDate={"12.15.2022"} serviceDate={"10.02.2022"} Currency={"$"}/>
-                </div>
-          </div>
 
         </div>
     );

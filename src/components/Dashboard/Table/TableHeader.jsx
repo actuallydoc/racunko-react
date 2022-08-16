@@ -16,7 +16,7 @@ const TableHeader = () => {
     }
     const handleChange = () => {
         console.log("From: "+ fromDate.toLocaleDateString('de-DE'));
-        console.log("From: "+ toDate.toLocaleDateString('de-DE'));
+        console.log("To: "+ toDate.toLocaleDateString('de-DE'));
     }
     return (
         <div className={"flex space-x-5 pb-5"}>
@@ -24,7 +24,7 @@ const TableHeader = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns }>
                     <DatePicker
                         label={"From"}
-                        value={fromValue}
+                        value={fromDate}
                         inputFormat="dd.MM.yyyy"
                         onChange={(newValue) => {
                             setFromValue(newValue);
@@ -39,8 +39,10 @@ const TableHeader = () => {
                     <DatePicker
                         label={"To"}
                         value={toDate}
+                        inputFormat="dd.MM.yyyy"
                         onChange={(newValue) => {
                             setToValue(newValue);
+                            setToDate(newValue);
                         }}
                         renderInput={(params) => <TextField {...params} />}
                     />

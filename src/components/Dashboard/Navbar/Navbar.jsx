@@ -10,49 +10,61 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import {Tooltip} from "@mui/material";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ProfileDialog from "../ProfileDialog/ProfileDialog";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({data}) => {
+    const navigate = useNavigate();
     const [modalIsOpen, setIsOpen] = useState(false);
-    const [cookies, setCookie, deleteCookies] = useCookies();
+    const [cookies, setCookie, removeCookie] = useCookies();
     const [state, setState] = useState(false);
-    const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+    const [profileModal , setProfileModal] = useState(false);
+    const [redirect, setRedirect] = useState(false);
+    const handleProfile = () => {
+        console.log(profileModal);
+        setProfileModal(!profileModal);
+        console.log(profileModal);
 
-    const handleMenu = (event) => {
-        const expression = event.currentTarget.innerText
     }
+    const handleHideProfile = () => {
+        setProfileModal(false);
+    };
+    const handleLogout = () => {
+        console.log("Clicked logout")
+        removeCookie('token');
+        toast("Logout Successfully")
+        navigate('/')
+
+    }
+
+
     const handleChange = (event) => {
         setState(event.target.checked);
         setCookie('theme',  event.target.checked, {path: '/'});
-
     }
 
     const closeModal = () => {
         setIsOpen(false);
     }
     const openModal = () => {
+        console.log(cookies)
         setIsOpen(true);
     }
 
-    useEffect(() => {
-        console.log(cookies)
-        if(cookies.theme === 'true'){
-            setState(true);
-        }
-        if (cookies.theme === 'false'){
-            setState(false);
-        }
-    }, [])
     return (
         <div className={"flex pt-3 text-xl text-slate-200 justify-center text-center  drop-shadow-xl bg-gradient-to-r from-sky-500 to-indigo-500"}>
             <div className={"flex space-x-3"}>
                 <div className={"mx-2 ml-5 py-2"}>
                     <Navitem name={"Home"} path={"/"} />
                 </div>
+
             </div>
             <div className={"ml-auto"}>
                 <Switch
                     label="theme"
-                    checked={state }
+                    checked={state}
                     defaultChecked
                     onChange={handleChange}
                 />
@@ -61,7 +73,7 @@ const Navbar = () => {
                 <div className={"flex space-x-3 cursor-pointer justify-center text-center"}>
                     <div>
                         <Menu
-                            sx={{ mt: '55px' }}
+                            sx={{ mt: '40px' }}
                             id="menu-appbar"
                             anchorEl={modalIsOpen}
                             anchorOrigin={{
@@ -76,22 +88,24 @@ const Navbar = () => {
                             open={Boolean(modalIsOpen)}
                             onClose={closeModal}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+
+                                <MenuItem key={"Profile"} onClick={
+                                    handleProfile}>
+                                    <Typography textAlign="center">Profile</Typography>
                                 </MenuItem>
-                            ))}
+                            <MenuItem key={"Logout"} onClick={handleLogout}>
+                                <Typography textAlign="center">Logout</Typography>
+                            </MenuItem>
                         </Menu>
                         <div className={"flex"}>
                             <div className={""}>
                                 <Tooltip title="Open settings">
                                     <IconButton onClick={()=> setIsOpen(!modalIsOpen)}>
-                                        <Avatar alt="User" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                                        {data.picture ? <Avatar src={data.picture} /> : <AccountCircleIcon/>}
                                     </IconButton>
                                 </Tooltip>
                           </div>
                             <div className={""}>
-                                {modalIsOpen ? <ArrowDownwardIcon onClick={openModal}/> : <ArrowUpwardIcon/>}
                             </div>
                         </div>
 
@@ -101,6 +115,7 @@ const Navbar = () => {
 
 
             </div>
+            <ProfileDialog open={profileModal} base64={data.picture} callback={handleHideProfile} username={data.username} email={data.email} avatarImg={data.picture}/>
         </div>
 
 

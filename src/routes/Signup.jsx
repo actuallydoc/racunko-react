@@ -7,10 +7,10 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import {useNavigate} from "react-router-dom";
 import {useCookies} from "react-cookie";
-import axios from "axios";
+import {userSignup} from "../services/authServices";
+
 const Signup = () => {
     const navigate = useNavigate();
-
     const [formState, setFormState] = useState({
         username: '',
         email: '',
@@ -26,24 +26,20 @@ const Signup = () => {
         });
     }
     const onSubmit = (e) => {
-        console.log(formState);
+
         e.preventDefault();
-
-        const res = axios.post('http://localhost:5000/user/create', formState)
-            .then(res => {
-                toast("Signed up!");
-                toast("Login in!");
+        userSignup(formState).then(res => {
+            console.log(res);
+            toast("Signup successful!");
+            setInterval(() => {
                 navigate('/login');
-            }).catch(err => {
-                //TODO Depends on the error message, show a toast message to the user like  "Invalid credentials!" or "Email already exists!"
-                console.log(err);
-                toast.error("Invalid credentials!");
-            });
-        setInterval(() => {
-
-            // navigate("/dashboard")
-        },2000);
+            }, 2000);
+        }).catch(err => {
+            toast.error(
+                err.response.data.message);
+        });
     }
+
     return (
         <div>
             <div>

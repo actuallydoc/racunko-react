@@ -8,10 +8,10 @@ import TextField from '@mui/material/TextField';
 import {Button, Typography} from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import {useCookies} from "react-cookie";
-import axios from 'axios'
+import {userLogin} from "../services/authServices";
 const Login = () => {
     const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(['token']);
+    const [cookie, setCookie] = useCookies(['token']);
     const [formState, setFormState] = useState({
         email: '',
         password: ''
@@ -29,22 +29,20 @@ const Login = () => {
         e.preventDefault();
         toast("Logging in!");
 
-        const res = axios.post('http://localhost:5000/api/login', formState)
+        userLogin(formState)
             .then(res => {
-                toast("Logging in!");
                 console.log(res.data);
+                toast("Logging in!");
                 setInterval(() => {
                     navigate('/dashboard');
                 }, 1000);
             }).catch(err => {
-                console.log(err);
-                toast.error("Invalid credentials!");
+                toast.error(err.response.data.message);
             });
+
     }
     useEffect(() => {
-        if(cookies.token){
-            navigate("/dashboard")
-        }
+        console.log(cookie)
         //Check if there is a cookie otherwise stay on the login page and show a toast message
         toast("Login required!");
     }, [])

@@ -11,11 +11,11 @@ import Signup from './routes/Signup';
 import Dashboard from './routes/Dashboard';
 import About from './routes/About';
 import UnknownPage from './components/Page404/UnknownPage';
-
+import { CookiesProvider } from "react-cookie";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
 
+    <CookiesProvider>
 <BrowserRouter>
     <Routes>
         <Route path="/" element={<App />} />
@@ -26,9 +26,9 @@ root.render(
         <Route path="*" element={<UnknownPage/>} />
     </Routes>
 </BrowserRouter>
+</CookiesProvider>,
 
 
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
