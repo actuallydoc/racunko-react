@@ -19,3 +19,9 @@ export const updateCompany = async(companyData) => {
     const data = await res.data;
     return data;
 }
+
+export const deleteCompany = async(companyData) => {
+    const res = await axios.post('http://localhost:5000/company/delete', companyData, { withCredentials: true })
+    const data = await res.data;
+    return data;
+}

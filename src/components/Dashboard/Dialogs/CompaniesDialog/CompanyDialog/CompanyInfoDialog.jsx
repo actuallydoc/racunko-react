@@ -10,7 +10,7 @@ import TextField from "@mui/material/TextField";
 import {toast} from "react-toastify";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import {updateCompany} from "../../../../../services/companyServices";
+import {deleteCompany, updateCompany} from "../../../../../services/companyServices";
 
 
 
@@ -88,6 +88,15 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
             });
         }
 
+    }
+    const handleDelete = () => {
+        deleteCompany(companyData.id).then(res => {
+            refetchcb();
+            console.log(res)
+        }).catch(err => {
+            refetchcb();
+
+        })
     }
     const handleSave = () => {
         updateCompany(form).then(res=>{
@@ -306,6 +315,11 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            </div>}
                                    </div>
 
+                                    <div>
+                                        <Button variant={"contained"} size={"small"} onClick={handleDelete}>
+                                            <h1>Delete Company</h1>
+                                        </Button>
+                                    </div>
 
                             </div>
 
