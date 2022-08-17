@@ -52,7 +52,7 @@ const PartnerCreateDialog = ({open, callback , refetchcb}) => {
         }).catch((err) => {
             console.log(err);
         })
-        //Post and update data to server if changed
+
     }
 
     const handleChange = (e) => {

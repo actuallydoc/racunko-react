@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import Button from "@mui/material/Button";
 import DialogContent from "@mui/material/DialogContent";
-import {Alert, DialogContentText} from "@mui/material";
+import {Alert, DialogContentText, Tooltip} from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -55,7 +55,9 @@ const CompanyDialog = ({open, callback}) => {
                     <DialogActions>
 
                         <div className={"pb-1"}>
+                            <Tooltip title={"Create a new Company"}>
                             <Button onClick={openCreateCompany} variant={"contained"} color={"success"}>Create</Button>
+                            </Tooltip>
                         </div>
                     </DialogActions>
                     <DialogContentText id="alert-dialog-slide-description">
@@ -76,7 +78,9 @@ const CompanyDialog = ({open, callback}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    <Tooltip title={"Close Menu"}>
                     <Button onClick={callback} color={"error"}>X</Button>
+                    </Tooltip>
                 </DialogActions>
             </Dialog>
             {createCompany && <CreateCompanyDialog refetchcb={refetchData} open={createCompany} callback={closeCreateCompany}/>}

@@ -1,20 +1,31 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import TableItem from './TableItem';
-const TableBody = ({company}) => {
+const TableBody = ({invoices}) => {
+    const [open , setOpen] = useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(!open);
+    }
     useEffect(() => {
         console.log("TableBody");
-        console.log(company);
+        console.log(invoices);
     }, [])
     return (
         <div className={"flex"}>
             <div className={""}>
-                    {company === false ? <h1>Table items</h1>:
-                        <div className={"flex"}>
-                            <div className={"flex font-mono font-bold text-center border-4 rounded-lg bg-slate-200"}>
-                                <h1 className={"justify-center"}>You dont have a company!. Create one in the Company Tab.</h1>
-                            </div>
-                        </div>}
+                {invoices !== undefined || invoices === 0  ? invoices.map(invoice => {
+
+                        return <TableItem invoiceDate={invoice.datumIzdaje} InvoiceNumber={invoice.stRacuna} Status={invoice.status} base64={invoice.Pdf64} paymentDate={invoice.datumPlacila} serviceDate={invoice.datumStoritve} Partner={invoice.partnerId} />
+                    }) : <div className={"flex"}>
+                <div className={"flex font-mono font-bold text-center border-4 rounded-lg bg-slate-200"}>
+                    <h1 className={"justify-center"}>You dont have a company!. Create one in the Company Tab.</h1>
                 </div>
+            </div>}
+
+            </div>
 
         </div>
     );

@@ -20,6 +20,7 @@ import {toast} from "react-toastify";
 import CompanyDialog from '../Dialogs/CompaniesDialog/CompanyDialog'
 import {fetchUserInvoices} from "../../../services/invoiceServices";
 import PartnerDialog from "../Dialogs/PartnerDialogs/PartnerDialog";
+import Button from "@mui/material/Button";
 const drawerWidth = 250;
 
 export default function SideBar({children}) {
@@ -38,20 +39,23 @@ export default function SideBar({children}) {
      const [partner, setPartner] = useState(false);
      const [service, setService] = useState(false);
      const [message , setMessage] = useState(false);
-
      const [invoices , setInvoices] = useState([]);
 
      useEffect(()=>{
          fetchUserInvoices().then(res=>{
-                setInvoices(res.invoices);
+                setInvoices(res.data);
          }).catch(err=>{
                 console.log(err)
          })
      }, []);
 
-
      const filterPaid = () =>{
-
+            return invoices.filter(invoice=>{
+                if (invoice.status === "PAID"){
+                    console.log(invoice)
+                    return invoice
+                }
+            })
      }
 
      const handleAll = () => {
@@ -163,6 +167,12 @@ export default function SideBar({children}) {
             {all && <div className={"pt-5 text-center pl-24"}>
                 <Table data={invoices}/>
             </div>}
+            <div className={"ml-auto text-center"}>
+                <Button onClick={filterPaid}>
+                    <h1>Click me</h1>
+                </Button>
+            </div>
+
             {paid && <div className={"pt-5 text-center pl-24"}>
                 <Table data={invoices} />
             </div>}

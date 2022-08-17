@@ -2,14 +2,11 @@ import React , {useState, useEffect} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import {DialogContentText} from "@mui/material";
+import {DialogContentText, Tooltip} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import DialogActions from "@mui/material/DialogActions";
 import Slide from "@mui/material/Slide";
-import {updateCompany} from "../../../../../services/companyServices";
 import {removePartner, updatePartner} from "../../../../../services/partnerServices";
 import {toast} from "react-toastify";
 
@@ -216,15 +213,23 @@ const PartnerInfoDialog = ({open, callback, data, refetchcb}) => {
                             </div>
                             <div className={"flex"}>
                                 <div className={"pt-6"}>
-                                    <Button variant={"contained"} color={"success"} size={"medium"} onClick={handleSave}>
-                                        <h1>
-                                            Save
-                                        </h1>
-                                    </Button>
-                                    <div className={"pt-6"}>
-                                        <Button onClick={handleRemove} variant={"contained"} color={"error"}>
-                                            Remove
+                                    <div>
+                                        <Tooltip title="Save the changes">
+                                        <Button variant={"contained"} color={"success"} size={"medium"} onClick={handleSave}>
+                                                <h1>
+                                                    Save
+                                                </h1>
+
                                         </Button>
+                                        </Tooltip>
+                                    </div>
+
+                                    <div className={"pt-6"}>
+                                        <Tooltip title="Delete the partner. this cannot be undone!">
+                                        <Button onClick={handleRemove} variant={"contained"} color={"error"}>
+                                            <h1>Remove</h1>
+                                        </Button>
+                                        </Tooltip>
                                     </div>
                                 </div>
                                 </div>
@@ -232,7 +237,9 @@ const PartnerInfoDialog = ({open, callback, data, refetchcb}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
+                    <Tooltip title={"Close the menu"}>
                     <Button onClick={callback}>X</Button>
+                   </Tooltip>
                 </DialogActions>
             </Dialog>
         </div>

@@ -4,7 +4,7 @@ const TableSubHeader = () => {
     return (
         <div className={""}>
             <div className={""}>
-                <ul className={"flex flex-row space-x-5 pb-1"}>
+                <ul className={"flex flex-row space-x-5 pb-1 grid-rows-4"}>
                     <div className={""}>
                         <li>Invoice Number</li>
                     </div>
@@ -26,12 +26,6 @@ const TableSubHeader = () => {
                     </div>
                     <div className={"pl-4"}>
                         <li>Amount</li>
-                    </div>
-                    <div className={"pl-10"}>
-                        <li>File</li>
-                    </div>
-                    <div className={"pl-24"}>
-                        <li>Functions</li>
                     </div>
 
 

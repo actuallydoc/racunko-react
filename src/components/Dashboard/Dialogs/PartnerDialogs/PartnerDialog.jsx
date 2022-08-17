@@ -6,7 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import {getUserPartners} from "../../../../services/partnerServices";
-import {Alert, DialogContentText} from "@mui/material";
+import {Alert, DialogContentText, Tooltip} from "@mui/material";
 import PartnerItem from "./PartnerItem";
 import PartnerInfoDialog from "./PartnerInfoDialog/PartnerInfoDialog";
 import PartnerCreateDialog from "./PartnerCreateDialog/PartnerCreateDialog";
@@ -62,7 +62,9 @@ const PartnerDialog = ({open ,callback}) => {
                 <DialogContent>
                     <DialogActions>
                         <div className={"pb-1"}>
+                            <Tooltip title={"Create a new Partner"}>
                             <Button onClick={handleOpen} variant={"contained"} color={"success"}>Create</Button>
+                                </Tooltip>
                         </div>
                     </DialogActions>
                     <DialogContentText id="alert-dialog-slide-description">
@@ -80,7 +82,9 @@ const PartnerDialog = ({open ,callback}) => {
             <div>
 
                 <div className={"pb-1"}>
+                    <Tooltip title={"Close Menu"}>
                     <Button onClick={callback}  color={"error"}>X</Button>
+                    </Tooltip>
                 </div>
             </div>
 
