@@ -1,121 +1,67 @@
-import React, {useEffect, useState} from 'react';
+import React , {useState, useEffect} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import {DialogContentText, Divider} from "@mui/material";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import Slide from "@mui/material/Slide";
+import {DialogContentText} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {toast} from "react-toastify";
+import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import {deleteCompany, updateCompany} from "../../../../../services/companyServices";
-
-
+import DialogActions from "@mui/material/DialogActions";
+import Slide from "@mui/material/Slide";
+import {updateCompany} from "../../../../../services/companyServices";
+import {removePartner, updatePartner} from "../../../../../services/partnerServices";
+import {toast} from "react-toastify";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
 const style = {
     width: 500,
     maxWidth: 'auto',
 }
-const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
-    const [companyData, setCompanyData] = useState(data);
-    const [form, setForm] = useState({
-        companyName: data.companyName,
-        companyAddress: data.companyAddress,
-        companyPostalCode: data.companyPostalCode,
-        companyCity: data.companyCity,
-        companyVAT: data.companyVAT,
-        companyIBAN: data.companyIBAN,
-        companySWIFT: data.companySWIFT,
-        companyBankname: data.companyBankname,
-        companyMaticnast: data.companyMaticnast,
-        companyPhone: data.companyPhone,
-        createdby: data.createdby,
-        sign: data.sign,
+const PartnerInfoDialog = ({open, callback, data, refetchcb}) => {
+    const [form , setForm] = useState({
+        id: data.id,
+        partnerName: data.partnerName,
+        partnerVAT: data.partnerVAT,
+        partnerAddress: data.partnerAddress,
+        partnerPostalCode: data.partnerPostalCode,
+        partnerCity: data.partnerCity,
+        partnerIBAN: data.partnerIBAN,
+        partnerSWIFT: data.partnerSWIFT,
+        partnerBankname: data.partnerBankname,
+        partnerMaticnast: data.partnerMaticnast,
+        partnerPhone: data.partnerPhone
 
     })
-    const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value
-        })
+
+
+    const handleChange = (e) =>{
+        setForm({...form , [e.target.name]: e.target.value})
+
         console.log(form)
     }
-    const handleImage= (e) => {
-        const reader = new FileReader();
-        const file = e.target.files[0];
-        reader.readAsDataURL(file);
-        reader.onloadstart = (e) => {
-            toast('Uploading image...', {
-                position: "top-right",
-                autoClose: true,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-
-        }
-        reader.onloadend = (e) => {
-            let base64 = reader.result;
-            setForm({
-                ...form,
-                sign: base64
-            })
-
-            toast('Uploaded succesfully...', {
-                position: "top-right",
-                autoClose: true,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-            toast('Click save...', {
-                position: "top-right",
-                autoClose: true,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
-        }
-
-    }
-    const handleDelete = () => {
-        deleteCompany(companyData.id).then(res => {
-            refetchcb();
-            console.log(res)
-        }).catch(err => {
-            refetchcb();
-
-        })
-    }
-    const handleSave = () => {
-        updateCompany(form).then(res=>{
+    const handleSave = () =>{
+        updatePartner(form).then(res=>{
             console.log("Res", res)
+            toast("Partner updated successfully", {type: "success"})
             refetchcb();
         }).catch((err)=>{
             console.log("Err", err)
         })
     }
-    const handleRemove = () => {
-        setForm({
-            ...form,
-            sign: ''
+    const handleRemove = () =>{
+        removePartner(form).then(res=>{
+            console.log(form.id)
+            console.log("Res", res)
+            toast("Partner removed successfully", {type: "success"})
+            refetchcb();
+        }).catch((err)=>{
+            console.log("Err", err)
         })
     }
-    useEffect(()=>{
-        console.log(data)
-    } , [data])
-
     return (
         <div>
             <Dialog
@@ -134,39 +80,39 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            autoFocus
                                            margin="dense"
                                            id="name"
-                                           label="Company Name"
-                                           type="email"
-                                           fullWidth
-                                           value={form.companyName}
-                                           variant="standard"
-                                           name="companyName"
-                                           onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <TextField sx={style}
-                                           autoFocus
-                                           margin="dense"
-                                           id="name"
-                                           label="Company Address"
-                                           type="email"
-                                           fullWidth
-                                           value={form.companyAddress}
-                                           variant="standard"
-                                           name="companyAddress"
-                                           onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <TextField sx={style}
-                                           autoFocus
-                                           margin="dense"
-                                           id="name"
-                                           label="Postal code"
+                                           label="Partner Name"
                                            type="string"
-                                           value={form.companyPostalCode}
+                                           fullWidth
+                                           value={form.partnerName}
                                            variant="standard"
-                                           name="companyPostalCode"
+                                           name="partnerName"
+                                           onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <TextField sx={style}
+                                           autoFocus
+                                           margin="dense"
+                                           id="name"
+                                           label="Partner Address"
+                                           type="email"
+                                           fullWidth
+                                           value={form.partnerAddress}
+                                           variant="standard"
+                                           name="partnerAddress"
+                                           onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <TextField sx={style}
+                                           autoFocus
+                                           margin="dense"
+                                           id="name"
+                                           label="Partner Postal code"
+                                           type="string"
+                                           value={form.partnerPostalCode}
+                                           variant="standard"
+                                           name="partnerPostalCode"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -178,9 +124,9 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label="City"
                                            type="email"
                                            fullWidth
-                                           value={form.companyCity}
+                                           value={form.partnerCity}
                                            variant="standard"
-                                             name="companyCity"
+                                           name="partnerCity"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -192,9 +138,9 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label="VAT"
                                            type="string"
                                            fullWidth
-                                           value={form.companyVAT}
+                                           value={form.partnerVAT}
                                            variant="standard"
-                                             name="companyVAT"
+                                           name="partnerVAT"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -206,9 +152,9 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label="IBAN"
                                            type="string"
                                            fullWidth
-                                           value={form.companyIBAN}
+                                           value={form.partnerIBAN}
                                            variant="standard"
-                                                name="companyIBAN"
+                                           name="partnerIBAN"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -220,9 +166,9 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label="Bank SWIFT"
                                            type="email"
                                            fullWidth
-                                           value={form.companySWIFT}
+                                           value={form.partnerSWIFT}
                                            variant="standard"
-                                                name="companySWIFT"
+                                           name="partnerSWIFT"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -234,9 +180,9 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label="Bank Name"
                                            type="name"
                                            fullWidth
-                                           value={form.companyBankname}
+                                           value={form.partnerBankname}
                                            variant="standard"
-                                                name="companyBankname"
+                                           name="partnerBankname"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -248,9 +194,9 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label=""
                                            type="email"
                                            fullWidth
-                                           value={form.companyMaticnast}
+                                           value={form.partnerMaticnast}
                                            variant="standard"
-                                                name="companyMaticnast"
+                                           name="partnerMaticnast"
                                            onChange={handleChange}
                                 />
                             </div>
@@ -262,73 +208,27 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            label="Company Phone"
                                            type="email"
                                            fullWidth
-                                           value={form.companyPhone}
+                                           value={form.partnerPhone}
                                            variant="standard"
-                                                name="companyPhone"
-                                           onChange={handleChange}
-                                />
-                            </div>
-                            <div>
-                                <TextField sx={style}
-                                           autoFocus
-                                           margin="dense"
-                                           id="name"
-                                           label="Owner"
-                                           type="email"
-                                           fullWidth
-                                           value={form.createdby}
-                                           variant="standard"
-                                                name="createdby"
+                                           name="partnerPhone"
                                            onChange={handleChange}
                                 />
                             </div>
                             <div className={"flex"}>
-                                <div className={"pt-5 pl-5"}>
-                                    <Button variant={"contained"} size={"small"} onClick={handleSave}>
+                                <div className={"pt-6"}>
+                                    <Button variant={"contained"} color={"success"} size={"medium"} onClick={handleSave}>
                                         <h1>
                                             Save
                                         </h1>
                                     </Button>
+                                    <div className={"pt-6"}>
+                                        <Button onClick={handleRemove} variant={"contained"} color={"error"}>
+                                            Remove
+                                        </Button>
+                                    </div>
                                 </div>
-                                {form?.sign && <div className={"pt-5 pl-3"}>
-                                    <Button variant={"contained"} size={'small'} color={"error"} onClick={handleRemove}>
-                                       <h1>Remove Sign</h1>
-                                    </Button>
-                                </div>}
-
-                                   <div>
-                                       <div className={"pt-5 mr-auto ml-32"}>
-                                           <Button variant={"contained"} color={"error"} size={"small"} onClick={handleDelete}>
-                                               <h1>Delete Company</h1>
-                                           </Button>
-                                       </div>
-
-                                       {form?.sign ?
-                                           <div className={"pt-5"}>
-                                               <img src={form.sign} width={"200"} height={"300"} />
-                                           </div>:  <div className={"pt-4"}>
-                                               <IconButton color="primary" size={"small"} aria-label="upload picture" component="label">
-                                                   <div className={"flex space-x-3 bg-slate-200 p-1 rounded-lg"}>
-                                                       <div>
-                                                           <input hidden onChange={handleImage}  accept="image/*" type="file"/>
-                                                           <p className={"text-slate-500"}>Upload Sign </p>
-                                                       </div>
-                                                       <div>
-                                                           <PhotoCamera/>
-                                                       </div>
-                                                   </div>
-                                               </IconButton>
-                                           </div>}
-                                   </div>
-
-
-
-                            </div>
-
+                                </div>
                         </div>
-
-
-
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -339,4 +239,4 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
     );
 };
 
-export default CompanyInfoDialog;
+export default PartnerInfoDialog;

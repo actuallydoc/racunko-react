@@ -53,6 +53,7 @@ const CompanyDialog = ({open, callback}) => {
                 <DialogTitle>{"Company Manager"}</DialogTitle>
                 <DialogContent>
                     <DialogActions>
+
                         <div className={"pb-1"}>
                             <Button onClick={openCreateCompany} variant={"contained"} color={"success"}>Create</Button>
                         </div>
@@ -75,7 +76,7 @@ const CompanyDialog = ({open, callback}) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={callback}>X</Button>
+                    <Button onClick={callback} color={"error"}>X</Button>
                 </DialogActions>
             </Dialog>
             {createCompany && <CreateCompanyDialog refetchcb={refetchData} open={createCompany} callback={closeCreateCompany}/>}

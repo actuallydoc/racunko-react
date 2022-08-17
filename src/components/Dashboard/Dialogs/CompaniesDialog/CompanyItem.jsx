@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import CompanyInfoDialog from "./CompanyDialog/CompanyInfoDialog";
+import {Divider} from "@mui/material";
 
 const CompanyItem = ({data, refetchcb}) => {
     const [open , setOpen] = useState(false)
@@ -16,7 +17,13 @@ const CompanyItem = ({data, refetchcb}) => {
                     <h1>{data.companyName}</h1>
                 </div>
                 <div>
+                    <Divider orientation={'vertical'}/>
+                </div>
+                <div>
                     <h1>{data.companyVAT}</h1>
+                </div>
+                <div>
+                    <Divider orientation={'vertical'}/>
                 </div>
                 <div>
                     <h1>{data.companyAddress}</h1>

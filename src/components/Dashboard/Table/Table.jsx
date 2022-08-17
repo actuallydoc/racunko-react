@@ -5,17 +5,8 @@ import TableSubHeader from './TableSubHeader';
 import {Divider} from "@mui/material";
 import {fetchUserInvoices} from "../../../services/invoiceServices";
 import {toast} from "react-toastify";
-const Table = () => {
+const Table = ({data}) => {
     const [company, setCompany] = useState([]);
-    useEffect(() => {
-        console.log("Table");
-        fetchUserInvoices().then(res => {
-            console.log(res);
-        }).catch(err => {
-            toast("Create a company!")
-            setCompany(err.response.data.message);
-        });
-    }, [])
     return (
         <div className={"w-9/12 h-auto pt-7 p-5 border-4 ml-auto mr-auto px-32 border-3 border-slate-200 rounded-lg drop-shadow-2xl"}>
             <div>
@@ -28,7 +19,7 @@ const Table = () => {
                 </div>
 
                 <div>
-                    <TableBody company={company} />
+                    <TableBody company={data} />
                 </div>
             </div>
 

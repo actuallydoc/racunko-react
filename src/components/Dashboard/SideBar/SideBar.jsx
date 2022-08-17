@@ -19,6 +19,7 @@ import BugButton from "./Components/BugButton";
 import {toast} from "react-toastify";
 import CompanyDialog from '../Dialogs/CompaniesDialog/CompanyDialog'
 import {fetchUserInvoices} from "../../../services/invoiceServices";
+import PartnerDialog from "../Dialogs/PartnerDialogs/PartnerDialog";
 const drawerWidth = 250;
 
 export default function SideBar({children}) {
@@ -26,7 +27,10 @@ export default function SideBar({children}) {
     const handleCompanyDialog = () => {
         setCompanyDialog(!companyDialog);
     }
-
+    const [partnerDialog, setPartnerDialog] = useState(false);
+    const handlePartnerDialog = () => {
+        setPartnerDialog(!partnerDialog);
+    }
      const [all, setAll] = useState(true);
      const [paid, setPaid] = useState(false);
      const [unpaid, setUnpaid] = useState(false);
@@ -44,6 +48,12 @@ export default function SideBar({children}) {
                 console.log(err)
          })
      }, []);
+
+
+     const filterPaid = () =>{
+
+     }
+
      const handleAll = () => {
          toast('All')
             setAll(true);
@@ -80,13 +90,14 @@ export default function SideBar({children}) {
         }
         const handlePartner = () => {
             toast('Partner')
-            setAll(false);
-            setPaid(false);
-            setUnpaid(false);
-            setCompany(false);
+            setAll(all);
+            setPaid(paid);
+            setUnpaid(unpaid);
+            setCompany(company);
             setPartner(true);
-            setService(false);
-            setMessage(false);
+            setPartnerDialog(true)
+            setService(service);
+            setMessage(message);
         }
         const handleService = () => {
             toast('Service')
@@ -148,11 +159,12 @@ export default function SideBar({children}) {
             </Drawer>
             </div>
             {company && <CompanyDialog open={companyDialog} callback={handleCompanyDialog}/>}
+            {partner && <PartnerDialog open={partnerDialog} callback={handlePartnerDialog}/>}
             {all && <div className={"pt-5 text-center pl-24"}>
-                <Table/>
+                <Table data={invoices}/>
             </div>}
             {paid && <div className={"pt-5 text-center pl-24"}>
-                <Table />
+                <Table data={invoices} />
             </div>}
 
 

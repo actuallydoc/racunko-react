@@ -140,6 +140,7 @@ const CreateCompanyDialog = ({open, callback , refetchcb}) => {
             console.log(res);
             refetchcb();
             toast('Company created...')
+            callback();
         }).catch((err) => {
             console.log(err);
         })
@@ -319,7 +320,7 @@ const CreateCompanyDialog = ({open, callback , refetchcb}) => {
                                         </div>
                                         <div>
                                             <div className={"pt-3"}>
-                                                <Button onClick={handleRemove} variant={"contained"} color={"success"}>
+                                                <Button onClick={handleRemove} variant={"contained"} color={"error"}>
                                                     <h1>
                                                         Remove Sign
                                                     </h1>
