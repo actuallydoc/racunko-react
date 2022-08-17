@@ -2,32 +2,36 @@ import React from 'react';
 import {Divider} from "@mui/material";
 const TableSubHeader = () => {
     return (
-        <div className={""}>
+        <div className={"flex"}>
             <div className={""}>
-                <ul className={"flex flex-row space-x-5 pb-1 grid-rows-4"}>
+                <ul className={"flex flex-row space-x-1 pb-1"}>
                     <div className={""}>
                         <li>Invoice Number</li>
                     </div>
-
-                    <div className={"pl-4"}>
+                    <Divider orientation={'vertical'}/>
+                    <div className={""}>
                         <li>Service Date</li>
                     </div>
-                    <div className={"pl-3"}>
+                    <Divider orientation={'vertical'}/>
+                    <div className={""}>
                         <li>Invoice Date</li>
                     </div>
-                    <div className={"pl-3"}>
+                    <Divider orientation={'vertical'}/>
+                    <div className={""}>
                         <li>Payment Date</li>
                     </div>
-                    <div className={"pl-10"}>
+                    <Divider orientation={'vertical'}/>
+                    <div className={""}>
                         <li>Partner</li>
                     </div>
-                    <div className={"pl-14"}>
+                    <Divider orientation={'vertical'}/>
+                    <div className={""}>
                         <li>Status</li>
                     </div>
-                    <div className={"pl-4"}>
+                    <Divider orientation={'vertical'} color={"black"}/>
+                    <div className={""}>
                         <li>Amount</li>
                     </div>
-
 
                 </ul>
             </div>

@@ -16,26 +16,27 @@ const Dashboard = () => {
     const [cookies, setCookie, deleteCookie] = useCookies(['token']);
     const [userData, setUserData] = useState([]);
     useEffect(() => {
+        if (cookies.token === undefined){
+            navigate('/login')
+        }
         fetchUserData().then(res => {
             setUserData(res.user);
         }).catch(err => {
             if (cookies.token) {
                 deleteCookie('token');
             }
-            toast(err.response.data.message)
+            toast('Redirecting')
             navigate('/login')
         })
     }, [])
     return (
     <div className={""}>
-
         <div className={"pt-20"}>
             <SideBar>
                 <Navbar data={userData} />
             </SideBar>
         </div>
         <div className={"pt-5 text-center pl-24"}>
-
         </div>
         <div className={"pt-5 text-right pr-5 align-text"}>
             <Fab color="primary" aria-label="Create">

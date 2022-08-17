@@ -167,11 +167,6 @@ export default function SideBar({children}) {
             {all && <div className={"pt-5 text-center pl-24"}>
                 <Table data={invoices}/>
             </div>}
-            <div className={"ml-auto text-center"}>
-                <Button onClick={filterPaid}>
-                    <h1>Click me</h1>
-                </Button>
-            </div>
 
             {paid && <div className={"pt-5 text-center pl-24"}>
                 <Table data={invoices} />

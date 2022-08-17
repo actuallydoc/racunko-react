@@ -18,10 +18,6 @@ const Table = ({data , func}) => {
                 </div>
             <Divider/>
                 <div>
-                    <TableSubHeader/>
-                </div>
-
-                <div>
                     <TableBody invoices={data} />
                 </div>
             </div>
