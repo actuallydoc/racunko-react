@@ -1,15 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import TableItem from './TableItem';
 import TableSubHeader from "./TableSubHeader";
-const TableBody = ({invoices}) => {
+const TableBody = ({invoices, refetchcb}) => {
     const [open , setOpen] = useState(false);
-
+    const [fetch , setFetch] = useState(false);
     const handleOpen = () => {
         setOpen(true);
     }
     const handleClose = () => {
         setOpen(!open);
     }
+
     useEffect(() => {
         console.log("TableBody");
         console.log(invoices);
@@ -21,7 +22,7 @@ const TableBody = ({invoices}) => {
                 {invoices !== undefined || invoices === 0  ? invoices.map(invoice => {
                         return (
                             <div>
-                            <TableItem data={invoice} invoiceDate={invoice.datumIzdaje} InvoiceNumber={invoice.stRacuna} Status={invoice.status} base64={invoice.Pdf64} paymentDate={invoice.datumPlacila} serviceDate={invoice.datumStoritve} Partner={invoice.partnerId} />
+                            <TableItem refetchcb={refetchcb} data={invoice} invoiceDate={invoice.datumIzdaje} InvoiceNumber={invoice.stRacuna} Status={invoice.status} base64={invoice.Pdf64} paymentDate={invoice.datumPlacila} serviceDate={invoice.datumStoritve} Partner={invoice.partnerId} />
                             </div>
                                 )
                     }) : <div className={"flex"}>

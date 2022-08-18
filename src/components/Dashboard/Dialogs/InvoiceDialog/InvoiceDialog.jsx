@@ -13,41 +13,92 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import {getUserPartners} from "../../../../services/partnerServices";
+import {deleteInvoice} from "../../../../services/invoiceServices";
+import {toast} from "react-toastify";
 const style = {
     width: 300,
     maxWidth: 'auto',
 }
 
+
+const STATUS_OPTIONS = [
+    {
+        1: 'PAID',
+        2: 'CANCELLED',
+        3: 'UNPAID'
+    }
+    ]
+
+
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-const InvoiceDialog = ({open , callback, data, partners}) => {
-    const [partner , setPartner] = useState(partners);
-    const [form , setForm ] = useState([]);
-    const [invoiceDate ,setInvoiceDate] = useState(new Date(data.datumIzdaje))
-    const [serviceDate , setServiceDate] = useState(new Date(data.datumStoritve))
-    const [paymentDate, setPaymentDate] = useState(new Date(data.datumPlacila))
-    const [selectPartner, setSelectPartner] = useState([])
-    useEffect(()=>{
+const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
 
-    }, [])
-
+    const [form , setForm ] = useState(
+        {
+             stRacuna: data.stRacuna,
+            datumIzdaje: data.datumIzdaje,
+            datumStoritve: data.datumStoritve,
+            datumPlacila: data.datumPlacila,
+            partnerId: data.partnerId,
+            status: data.status
+        }
+    );
+    const [invoiceDate ,setInvoiceDate] = useState(form.datumIzdaje)
+    const [serviceDate , setServiceDate] = useState(form.datumStoritve)
+    const [paymentDate, setPaymentDate] = useState(form.datumPlacila)
+    const [invoiceId, setInvoiceId] = useState({
+        id: data.id,
+        partnerId: data.partnerId
+    })
     const handleSave=()=>{
         console.log("Handle save")
     }
     const handleDelete = ()=>{
-        console.log("Handle delete")
+        console.log('Data id: ' + data.id)
+        deleteInvoice(invoiceId).then(res=>{
+                toast('Invoice Deleted')
+            callback()
+            refetchcb()
+        }).catch(err=>{
+            console.log(err)
+        })
+
+
     }
 
-    const handleChange = (e)=>{
-      setSelectPartner(e.target.value)
-        console.log(e.target.value)
+        const handlePartnerChange = (e)=>{
+        setForm({...form, partner: e.target.value})
+        console.log(form)
     }
-    useEffect(()=>{
-        console.log("data", data)
-        console.log(partners)
-    }, [])
+    const handleStatusChange = (e)=>{
+        setForm({...form, status: e.target.value})
+        console.log(form)
+    }
+    const handleInvoiceDate = (e)=>{
+        setForm({...form, datumIzdaje: e.toLocaleDateString('de-DE')})
+        setInvoiceDate(e)
+    }
+    const handleServiceDate = (e)=>{
+        console.log(e)
+        setForm({...form, datumStoritve: e.toLocaleDateString('de-DE')})
+        setServiceDate(e)
+    }
+    const handlePaymentDate = (e)=>{
+        console.log(e.toLocaleDateString('de-DE'))
+        setForm({...form, datumPlacila: e.toLocaleDateString('de-DE')})
+        setPaymentDate(e)
+    }
+    const handleRestoreData = ()=>{
+        setForm({...form, datumIzdaje: data.datumIzdaje, datumStoritve: data.datumStoritve, datumPlacila: data.datumPlacila, partnerId: data.partnerId, status: data.status})
+        setInvoiceDate(data.datumIzdaje)
+        setServiceDate(data.datumStoritve)
+        setPaymentDate(data.datumPlacila)
+    }
+    useEffect(() => {
+        console.log(form)
+        }, [form])
 
     return (
         <div>
@@ -64,19 +115,31 @@ const InvoiceDialog = ({open , callback, data, partners}) => {
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Partner</InputLabel>
                             <Select
-                                value={partner.partnerId}
+                                labelId="demo-simple-select-autowidth-label"
+                                id="demo-simple-select-autowidth"
+                                onChange={handlePartnerChange}
+                                autoWidth
+                                defaultValue={data.partnerId}
                                 label="Partner"
-                                uncontrolled
-                                onChange={handleChange}
                             >
-                                {partners.map(partner => {
-                                    console.log("Partner id", partner.id)
-                                        return (
-                                            <div>
-                                                <MenuItem value={partner.id}>{partner.partnerName}</MenuItem>
-                                            </div>
-                                        )
+                                {partners.map((partner)=>{
+                                    console.log(partner)
+                                    return <MenuItem value={partner.id}>{partner.partnerName}</MenuItem>
                                 })}
+                            </Select>
+
+                        </FormControl>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                            <Select
+                                onChange={handleStatusChange}
+                                autoWidth
+                                defaultValue={data.status}
+                                label="Status"
+                            >
+                             <MenuItem value={'PAID'}>PAID</MenuItem>
+                                <MenuItem value={'UNPAID'}>UNPAID</MenuItem>
+                                <MenuItem value={'CANCELLED'}>CANCELLED</MenuItem>
                             </Select>
                         </FormControl>
                     </DialogActions>
@@ -85,11 +148,10 @@ const InvoiceDialog = ({open , callback, data, partners}) => {
                         <LocalizationProvider dateAdapter={AdapterDateFns }>
                             <DatePicker
                                 label={"Invoice Date"}
-                                value={invoiceDate.toLocaleDateString('de')}
+                                value={invoiceDate}
                                 inputFormat="dd.MM.yyyy"
-                                onChange={(newValue) => {
-                                    setInvoiceDate(newValue);
-                                }}
+                                onChange={handleInvoiceDate}
+
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
@@ -97,12 +159,10 @@ const InvoiceDialog = ({open , callback, data, partners}) => {
                     <div className={"pt-5"}>
                         <LocalizationProvider dateAdapter={AdapterDateFns }>
                             <DatePicker
-                                label={"Invoice Date"}
-                                value={serviceDate.toLocaleDateString('de')}
+                                label={"Service Date"}
+                                value={serviceDate}
                                 inputFormat="dd.MM.yyyy"
-                                onChange={(newValue) => {
-                                    setServiceDate(newValue);
-                                }}
+                                onChange={handleServiceDate}
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
@@ -110,29 +170,28 @@ const InvoiceDialog = ({open , callback, data, partners}) => {
                     <div className={"pt-5"}>
                         <LocalizationProvider dateAdapter={AdapterDateFns }>
                             <DatePicker
-                                label={"Invoice Date"}
-                                value={paymentDate.toLocaleDateString('de')}
+                                label={"Payment Date"}
+                                value={paymentDate}
                                 inputFormat="dd.MM.yyyy"
-                                onChange={(newValue) => {
-                                    setPaymentDate(newValue);
-                                }}
+                                onChange={handlePaymentDate}
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
                     </div>
                     </div>
-                    <TextField sx={style}
-                               autoFocus
-                               margin="dense"
-                               id="name"
-                               label="Invoice Date"
-                               type="email"
-                               fullWidth
-                               value={data.datumIzdaje}
-                               variant="standard"
-                               name="companyName"
-                               onChange={handleChange}
-                    />
+                    <div className={"pt-5 pb-5"}>
+                        <TextField
+                            id="outlined-number"
+                            label="Invoice Number"
+                            type="number"
+                            defaultValue={data.stRacuna}
+                            onChange={(e)=>setForm({...form, stRacuna: e.target.value})}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
+
                     <DialogContentText id="alert-dialog-slide-description">
 
                     </DialogContentText>
@@ -153,7 +212,10 @@ const InvoiceDialog = ({open , callback, data, partners}) => {
                 </DialogContent>
                 <DialogActions>
                     <Tooltip title={"Close Menu"}>
-                        <Button onClick={callback} color={"error"}>X</Button>
+                        <Button onClick={()=>{
+                            callback()
+                            handleRestoreData()
+                        }} color={"error"}>X</Button>
                     </Tooltip>
                 </DialogActions>
             </Dialog>

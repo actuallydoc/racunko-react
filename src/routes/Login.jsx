@@ -9,6 +9,7 @@ import {Button, Typography} from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import {useCookies} from "react-cookie";
 import {userLogin} from "../services/authServices";
+
 const Login = () => {
     const navigate = useNavigate();
     const [cookie, setCookie] = useCookies(['token']);
@@ -34,6 +35,7 @@ const Login = () => {
                 console.log(res.data);
                 toast("Logging in!");
                 setInterval(() => {
+                    toast('Already logged In!')
                     navigate('/dashboard');
                 }, 1000);
             }).catch(err => {
@@ -43,8 +45,11 @@ const Login = () => {
     }
     useEffect(() => {
         console.log(cookie)
+        if (cookie.token !== undefined) {
+            navigate('/dashboard');
+
+        }
         //Check if there is a cookie otherwise stay on the login page and show a toast message
-        toast("Login required!");
     }, [])
     return (
     <div>

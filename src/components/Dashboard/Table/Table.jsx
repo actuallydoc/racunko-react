@@ -5,7 +5,7 @@ import TableSubHeader from './TableSubHeader';
 import {Divider} from "@mui/material";
 import {fetchUserInvoices} from "../../../services/invoiceServices";
 import {toast} from "react-toastify";
-const Table = ({data , func}) => {
+const Table = ({data , func, refetchcb}) => {
     useEffect(()=>{
 
     }, []);
@@ -18,7 +18,7 @@ const Table = ({data , func}) => {
                 </div>
             <Divider/>
                 <div>
-                    <TableBody invoices={data} />
+                    <TableBody invoices={data} refetchcb={refetchcb} />
                 </div>
             </div>
 

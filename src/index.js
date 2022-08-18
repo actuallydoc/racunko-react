@@ -12,9 +12,9 @@ import Dashboard from './routes/Dashboard';
 import About from './routes/About';
 import UnknownPage from './components/Page404/UnknownPage';
 import { CookiesProvider } from "react-cookie";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-
     <CookiesProvider>
 <BrowserRouter>
     <Routes>
@@ -27,7 +27,6 @@ root.render(
     </Routes>
 </BrowserRouter>
 </CookiesProvider>,
-
 
 );
 

@@ -9,7 +9,7 @@ import SelectStatus from '../Table/SelectStatus';
 import PDFDialog from '../PDFDialog/PDFDialog'
 import InvoiceDialog from "../Dialogs/InvoiceDialog/InvoiceDialog";
 import {getUserPartners} from "../../../services/partnerServices";
-const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate, base64,Amount,SelectStatusValue, Status, Partner, Currency }) => {
+const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate, base64,Amount,SelectStatusValue, Status, Partner, Currency, refetchcb }) => {
     const [open, setOpen] = useState(false);
     const [invoiceOpen , setInvoiceOpen] = useState(false);
     const [partnerData , setPartnerData] = useState([]);
@@ -35,7 +35,8 @@ const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,
     return (
         <div className={"border border-slate-200 pb-2 rounded-lg hover:py-1 scale-105 duration-150"}>
             <Slide direction="up" in={true} mountOnEnter unmountOnExit>
-                <div className={"flex flex-row m-1  transform hover:bg-slate-50 cursor-pointer"} onClick={handleInvoiceOpen}>
+                <div className={"flex"}>
+                    <div className={"flex flex-row m-1  transform hover:bg-slate-50 cursor-pointer"} onClick={handleInvoiceOpen}>
                     <ul className={"flex flex-row space-x-3  text-center ml-10"}>
                         <div className={""}>
                             <Tooltip title={"Invoice Number"}>
@@ -73,30 +74,32 @@ const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,
                                 <p>{Currency}</p>
                             </div>
                         </div>
-                        <Divider orientation={"vertical"}/>
-                        <div>
-                            <Button onClick={handleClick} variant="outlined" size={"small"} startIcon={<PictureAsPdfIcon />}>
-                                PDF
-                            </Button>
-                             <PDFDialog open={open}  base64={base64} callback={handleClose}/>
-                        </div>
-                        <Divider orientation={"vertical"}/>
-                        <div>
-                            <Button variant="outlined" size={"small"} startIcon={<EditIcon />}>
-                                EDIT
-                            </Button>
-                        </div>
-                        <div>
-                            <Button variant="outlined"  size={"small"} startIcon={<DeleteIcon/>}>
-                                DELETE
-                            </Button>
-                        </div>
 
                     </ul>
+                    </div>
+                    <Divider orientation={"vertical"}/>
+                    <div>
+                        <Button onClick={handleClick} variant="outlined" size={"small"} startIcon={<PictureAsPdfIcon />}>
+                            PDF
+                        </Button>
+                        <PDFDialog open={open}  base64={base64} callback={handleClose}/>
+                    </div>
+                    <Divider orientation={"vertical"}/>
+                    <div>
+                        <Button variant="outlined" size={"small"} startIcon={<EditIcon />}>
+                            EDIT
+                        </Button>
+                    </div>
+                    <div>
+                        <Button variant="outlined"  size={"small"} startIcon={<DeleteIcon/>}>
+                            DELETE
+                        </Button>
+                    </div>
                 </div>
+
             </Slide>
             <div>
-                <InvoiceDialog data={data} callback={handleInvoiceClose} open={invoiceOpen} partners={partnerData} />
+                <InvoiceDialog data={data} refetchcb={refetchcb} callback={handleInvoiceClose} open={invoiceOpen} partners={partnerData} />
             </div>
         </div>
     );

@@ -24,6 +24,7 @@ import Button from "@mui/material/Button";
 const drawerWidth = 250;
 
 export default function SideBar({children}) {
+
     const [companyDialog, setCompanyDialog] = useState(false);
     const handleCompanyDialog = () => {
         setCompanyDialog(!companyDialog);
@@ -41,6 +42,7 @@ export default function SideBar({children}) {
      const [message , setMessage] = useState(false);
      const [invoices , setInvoices] = useState([]);
 
+     const [fetch, setFetch] = useState(false);
      useEffect(()=>{
          fetchUserInvoices().then(res=>{
                 setInvoices(res.data);
@@ -49,6 +51,18 @@ export default function SideBar({children}) {
          })
      }, []);
 
+     useEffect(()=>{
+         fetchUserInvoices().then(res=>{
+             setInvoices(res.data);
+         }).catch(err=>{
+             console.log(err)
+         })
+     }, [fetch])
+
+    const refetchcb = () => {
+        console.log("refetching")
+        setFetch(!fetch);
+    }
      const filterPaid = () =>{
             return invoices.filter(invoice=>{
                 if (invoice.status === "PAID"){
@@ -165,11 +179,11 @@ export default function SideBar({children}) {
             {company && <CompanyDialog open={companyDialog} callback={handleCompanyDialog}/>}
             {partner && <PartnerDialog open={partnerDialog} callback={handlePartnerDialog}/>}
             {all && <div className={"pt-5 text-center pl-24"}>
-                <Table data={invoices}/>
+                <Table refetchcb={refetchcb} data={invoices}/>
             </div>}
 
             {paid && <div className={"pt-5 text-center pl-24"}>
-                <Table data={invoices} />
+                <Table refetchcb={refetchcb} data={invoices} />
             </div>}
 
 
