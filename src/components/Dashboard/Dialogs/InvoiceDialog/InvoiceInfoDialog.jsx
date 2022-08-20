@@ -33,7 +33,7 @@ const STATUS_OPTIONS = [
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
+const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
 
     const [form , setForm ] = useState(
         {
@@ -42,7 +42,8 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
             datumStoritve: data.datumStoritve,
             datumPlacila: data.datumPlacila,
            partnerId: data.partnerId,
-            status: data.status
+            status: data.status,
+            services: JSON.parse(data.services)
         }
     );
     const [invoiceDate ,setInvoiceDate] = useState(form.datumIzdaje)
@@ -72,7 +73,15 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
 
         const handlePartnerChange = (e)=>{
         setForm({...form, partner: e.target.value})
-        console.log(form)
+        console.log(form)}
+
+    const handleRemoveService = (service)=>{
+        const newServices = form.services.filter(s=>s.id !== service.id)
+        setForm({...form, services: newServices})
+    }
+    const handleAddService = ()=>{
+        console.log('Add service')
+        setForm({...form, services: [...form.services, {service: '', price: 0}]})
     }
     const handleStatusChange = (e)=>{
         setForm({...form, status: e.target.value})
@@ -195,6 +204,52 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
                     <DialogContentText id="alert-dialog-slide-description">
 
                     </DialogContentText>
+                <div className={"flex-col"}>
+                    {form?.services.map((service)=>{
+                        return (
+                    <div className={"flex space-x-5 pt-5"}>
+                        <div>
+                            <TextField sx={{"width": "100%"}}
+                                id="filled-multiline-flexible"
+                                label="Description"
+                                multiline
+                                value={service[0]}
+                                variant="filled"
+                            />
+                        </div>
+                        <div>
+                            <TextField
+                                id="filled-multiline-flexible"
+                                label="Quantity"
+                                maxRows={20}
+                                value={service[1]}
+                                variant="filled"
+                            />
+                        </div>
+                        <div>
+                            <TextField
+                                id="filled-multiline-flexible"
+                                label="Price"
+                                value={service[2]}
+                                variant="filled"
+                            />
+                        </div>
+
+                    </div>)}
+                    )
+                }
+                </div>
+                <div className={"pt-5"}>
+                    <div className={"pb-5"}>
+                        <Button size={"small"} onClick={handleAddService} variant={"contained"} color={"primary"}>Add service</Button>
+                    </div>
+                    <div>
+                        <Button size={"small"} onClick={handleRemoveService} variant={"contained"} color={"error"}>Remove ALL Services</Button>
+                    </div>
+
+                </div>
+                </DialogContent>
+                <DialogActions>
                     <div className={"flex space-x-5"}>
                         <div className={""}>
                             <Tooltip title={"Save invoice data"}>
@@ -206,21 +261,20 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
                                 <Button onClick={handleDelete}  variant={"contained"} color={"error"}>Delete</Button>
                             </Tooltip>
                         </div>
+                        <div>
+                            <Tooltip title={"Close Menu"}>
+                                <Button onClick={()=>{
+                                    callback()
+                                    handleRestoreData()
+                                }} color={"error"}>X</Button>
+                            </Tooltip>
+                        </div>
                     </div>
 
-
-                </DialogContent>
-                <DialogActions>
-                    <Tooltip title={"Close Menu"}>
-                        <Button onClick={()=>{
-                            callback()
-                            handleRestoreData()
-                        }} color={"error"}>X</Button>
-                    </Tooltip>
                 </DialogActions>
             </Dialog>
         </div>
     );
 };
 
-export default InvoiceDialog;
+export default InvoiceInfoDialog;

@@ -101,6 +101,7 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
     const handleSave = () => {
         updateCompany(form).then(res=>{
             console.log("Res", res)
+            toast.success('Saved succesfully...');
             refetchcb();
         }).catch((err)=>{
             console.log("Err", err)
@@ -245,7 +246,7 @@ const CompanyInfoDialog = ({data , callback, open, refetchcb}) => {
                                            autoFocus
                                            margin="dense"
                                            id="name"
-                                           label=""
+                                           label="Registration Number"
                                            type="email"
                                            fullWidth
                                            value={form.companyMaticnast}

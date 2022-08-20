@@ -31,20 +31,42 @@ const BootstrapDialogTitle = ({children}) => {
 
 
 
-export default function PDFDialog({open ,base64, callback}) {
+export default function PDFDialog({open ,base64,signedBase64, callback}) {
+    const [text, setText] = useState('PDF');
+    const [docState, setDocState] = useState(true);
     return (
         <div>
             <BootstrapDialog
                 onClose={callback}
                 aria-labelledby="customized-dialog-title"
                 open={open}
-
             >
                 <DialogContent dividers>
-                    {base64 ? <embed src={base64} width={"500"} height={"700"} /> : <h1>No PDF found</h1>}
+                    {base64 && docState ? <embed src={base64} width={"500"} height={"700"} /> : null}
+                    {!docState && signedBase64 ? <embed src={signedBase64} width={"500"} height={"700"} /> : null}
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={callback} color="primary">
+
+                    <Button onClick={()=> {
+                        setDocState(true)
+                        setText('PDF')
+                    }}>
+                        <div>
+                            <p>PDF</p>
+                        </div>
+                    </Button>
+
+                    <Button onClick={()=> {
+                        setDocState(!text);
+                        setText("Signed PDF");
+                    }}>
+                        <div>
+                            <p>SIGNED PDF</p>
+                        </div>
+                    </Button>
+                    <Button autoFocus onClick={()=>{
+                        callback();
+                    }} color="error">
                         Close
                     </Button>
                 </DialogActions>

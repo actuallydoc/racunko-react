@@ -7,9 +7,9 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SelectStatus from '../Table/SelectStatus';
 import PDFDialog from '../PDFDialog/PDFDialog'
-import InvoiceDialog from "../Dialogs/InvoiceDialog/InvoiceDialog";
+import InvoiceInfoDialog from "../Dialogs/InvoiceDialog/InvoiceInfoDialog";
 import {getUserPartners} from "../../../services/partnerServices";
-const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate, base64,Amount,SelectStatusValue, Status, Partner, Currency, refetchcb }) => {
+const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,signedBase64 ,base64,Amount,SelectStatusValue, Status, Partner, Currency, refetchcb }) => {
     const [open, setOpen] = useState(false);
     const [invoiceOpen , setInvoiceOpen] = useState(false);
     const [partnerData , setPartnerData] = useState([]);
@@ -82,24 +82,13 @@ const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,
                         <Button onClick={handleClick} variant="outlined" size={"small"} startIcon={<PictureAsPdfIcon />}>
                             PDF
                         </Button>
-                        <PDFDialog open={open}  base64={base64} callback={handleClose}/>
-                    </div>
-                    <Divider orientation={"vertical"}/>
-                    <div>
-                        <Button variant="outlined" size={"small"} startIcon={<EditIcon />}>
-                            EDIT
-                        </Button>
-                    </div>
-                    <div>
-                        <Button variant="outlined"  size={"small"} startIcon={<DeleteIcon/>}>
-                            DELETE
-                        </Button>
+                        <PDFDialog open={open}  base64={base64} signedBase64={signedBase64} callback={handleClose}/>
                     </div>
                 </div>
 
             </Slide>
             <div>
-                <InvoiceDialog data={data} refetchcb={refetchcb} callback={handleInvoiceClose} open={invoiceOpen} partners={partnerData} />
+                <InvoiceInfoDialog data={data} refetchcb={refetchcb} callback={handleInvoiceClose} open={invoiceOpen} partners={partnerData} />
             </div>
         </div>
     );
