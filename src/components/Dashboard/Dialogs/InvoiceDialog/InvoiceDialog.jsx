@@ -41,32 +41,34 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
             datumIzdaje: data.datumIzdaje,
             datumStoritve: data.datumStoritve,
             datumPlacila: data.datumPlacila,
-            partnerId: data.partnerId,
+           partnerId: data.partnerId,
             status: data.status
         }
     );
     const [invoiceDate ,setInvoiceDate] = useState(form.datumIzdaje)
     const [serviceDate , setServiceDate] = useState(form.datumStoritve)
     const [paymentDate, setPaymentDate] = useState(form.datumPlacila)
-    const [invoiceId, setInvoiceId] = useState({
-        id: data.id,
-        partnerId: data.partnerId
-    })
     const handleSave=()=>{
         console.log("Handle save")
     }
     const handleDelete = ()=>{
         console.log('Data id: ' + data.id)
-        deleteInvoice(invoiceId).then(res=>{
+        deleteInvoice({
+            invoiceID: data.id,
+            partnerId: data.partnerId
+        }).then(res=>{
                 toast('Invoice Deleted')
             callback()
             refetchcb()
         }).catch(err=>{
             console.log(err)
         })
+  }
+    useEffect(()=>{
+      console.log(partners)
+    },[])
 
-
-    }
+    
 
         const handlePartnerChange = (e)=>{
         setForm({...form, partner: e.target.value})
@@ -96,13 +98,10 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
         setServiceDate(data.datumStoritve)
         setPaymentDate(data.datumPlacila)
     }
-    useEffect(() => {
-        console.log(form)
-        }, [form])
-
+  
     return (
         <div>
-            <Dialog
+          <Dialog
                 open={open}
                 TransitionComponent={Transition}
                 keepMounted
@@ -122,9 +121,10 @@ const InvoiceDialog = ({open , callback, data, partners, refetchcb}) => {
                                 defaultValue={data.partnerId}
                                 label="Partner"
                             >
-                                {partners.map((partner)=>{
-                                    console.log(partner)
-                                    return <MenuItem value={partner.id}>{partner.partnerName}</MenuItem>
+                                {partners?.map((partner)=>{
+                                return (
+                                  <MenuItem value={partner.id}>{partner.partnerName}</MenuItem>
+                                )
                                 })}
                             </Select>
 

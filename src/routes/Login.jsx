@@ -35,9 +35,9 @@ const Login = () => {
                 console.log(res.data);
                 toast("Logging in!");
                 setInterval(() => {
-                    toast('Already logged In!')
                     navigate('/dashboard');
                 }, 1000);
+        toast('Already logged in!')
             }).catch(err => {
                 toast.error(err.response.data.message);
             });
