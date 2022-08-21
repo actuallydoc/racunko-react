@@ -44,13 +44,11 @@ const Login = () => {
 
     }
     useEffect(() => {
-        console.log(cookie)
         if (cookie.token !== undefined) {
             navigate('/dashboard');
 
         }
-        //Check if there is a cookie otherwise stay on the login page and show a toast message
-    }, [])
+    })
     return (
     <div>
         <div>

@@ -1,26 +1,8 @@
-import React, {useEffect, useState} from 'react';
 import TableItem from './TableItem';
-import TableSubHeader from "./TableSubHeader";
-import {getUserPartners} from "../../../services/partnerServices";
 const TableBody = ({invoices, refetchcb}) => {
-    const [open , setOpen] = useState(false);
-    const [fetch , setFetch] = useState(false);
-    const [partners, setPartners] = useState([]);
-    const handleOpen = () => {
-        setOpen(true);
-    }
-    const handleClose = () => {
-        setOpen(!open);
-    }
 
-    useEffect(() => {
-        console.log("TableBody");
-        getUserPartners().then(res=>{
-            setPartners(res);
-        }).catch(err=>{
-            console.log(err)
-        })
-    }, [])
+  //TODO : Fetch user partners and fill the name of the partner instead of partner id in the table
+
 
     return (
         <div className={"flex flex-col"}>

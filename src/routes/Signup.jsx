@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Navbar from "../components/Signup/Navbar/Navbar";
 import {toast} from "react-toastify";
 import ToastNoti from "../components/Home/Toast/ToatNoti";
@@ -6,7 +6,6 @@ import {Button, Typography} from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import {useNavigate} from "react-router-dom";
-import {useCookies} from "react-cookie";
 import {userSignup} from "../services/authServices";
 
 const Signup = () => {
@@ -64,7 +63,7 @@ const Signup = () => {
                     >
                         <TextField id="outlined-basic" name="username" label="Username" variant="outlined" onChange={onChange} />
                         <TextField id="outlined-basic" name="email" label="Email" variant="outlined" onChange={onChange} />
-                        <TextField id="outlined-basic" name="password" label="Password" variant="outlined" onChange={onChange}/>
+                        <TextField id="outlined-basic" name="password" label="Password" type={"password"} variant="outlined" onChange={onChange}/>
                         <div>
                             <Button onClick={onSubmit} variant="contained" color="primary" size="large" fullWidth>Login</Button>
                         </div>

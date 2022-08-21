@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import {Alert, DialogContentText, Select, Tooltip} from "@mui/material";
+import {DialogContentText, Select, Tooltip} from "@mui/material";
 import Button from "@mui/material/Button";
 import Slide from "@mui/material/Slide";
 import TextField from "@mui/material/TextField";
@@ -21,13 +21,6 @@ const style = {
 }
 
 
-const STATUS_OPTIONS = [
-    {
-        1: 'PAID',
-        2: 'CANCELLED',
-        3: 'UNPAID'
-    }
-    ]
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -76,13 +69,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
         })
   }
     const handleServiceChange = (e, service, index) => {
-        const services = form.services;
-        services[index].service = service;
-        setForm({...form, services: services});
-        console.log(
-            'Service changed: ' + service + ' at index: ' + index
-        )
-
+       //TODO IMPEMENT SERVICE CHANGE FOR INVOICE DIALOG
     }
     const handlePartnerChange = (e)=>{
         setForm({...form, partner: e.target.value})
@@ -92,12 +79,20 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
         console.log(form)
     }
     const handleRemoveService = (service)=>{
-        const newServices = form.services.pop(form.services[form.services.length])
-        setForm({...form, services: form.services})
+        const services = form.services;
+        services.splice(services.indexOf(service), 1);
+        setForm({...form, services: services});
+        console.log(
+            'Service removed: ' + service
+        )
     }
-    const handleAddService = ()=>{
-        console.log('Add service')
-        setForm({...form, services: [...form.services, {service: '', price: 0}]})
+    const handleAddService = (service)=>{
+        const services = form.services;
+        services.push({service: service, price: 0});
+        setForm({...form, service: services});
+        console.log(
+            'Service added: ' + JSON.stringify(services)
+        )
     }
     const handleStatusChange = (e)=>{
         setForm({...form, status: e.target.value})
@@ -123,9 +118,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
         setServiceDate(data.datumStoritve)
         setPaymentDate(data.datumPlacila)
     }
-        useEffect(()=>{
-            console.log(data.companyId);
-        }, []);
+
     return (
         <div>
           <Dialog
@@ -133,6 +126,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
                 TransitionComponent={Transition}
                 keepMounted
                 onClose={callback}
+                maxWidth={"xl"}
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle>{"Invoice"}</DialogTitle>
@@ -226,6 +220,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
                     </div>
                     <div className={"pt-5 pb-5"}>
                         <TextField
+                            sx={style}
                             id="outlined-number"
                             label="Invoice Number"
                             type="number"
@@ -244,7 +239,8 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
                         return (
                     <div className={"flex space-x-5 pt-5"}>
                         <div>
-                            <TextField sx={{"width": "100%"}}
+                            <TextField
+                                sx={style}
                                 id="filled-multiline-flexible"
                                 label="Description"
                                 multiline
@@ -258,6 +254,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
                         </div>
                         <div>
                             <TextField
+                                sx={style}
                                 id="filled-multiline-flexible"
                                 label="Quantity"
                                 maxRows={20}
@@ -272,6 +269,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchc
                         </div>
                         <div>
                             <TextField
+                                sx={style}
                                 id="filled-multiline-flexible"
                                 label="Price"
                                 defaultValue={service[2]}

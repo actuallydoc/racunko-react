@@ -20,7 +20,6 @@ import {toast} from "react-toastify";
 import CompanyDialog from '../Dialogs/CompaniesDialog/CompanyDialog'
 import {fetchUserInvoices} from "../../../services/invoiceServices";
 import PartnerDialog from "../Dialogs/PartnerDialogs/PartnerDialog";
-import Button from "@mui/material/Button";
 const drawerWidth = 250;
 
 export default function SideBar({children}) {

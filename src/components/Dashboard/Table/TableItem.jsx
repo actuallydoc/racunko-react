@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import Slide from "@mui/material/Slide";
 import {Divider, Tooltip} from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import Button from "@mui/material/Button";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SelectStatus from '../Table/SelectStatus';
 import PDFDialog from '../PDFDialog/PDFDialog'
 import InvoiceInfoDialog from "../Dialogs/InvoiceDialog/InvoiceInfoDialog";
 import {getUserPartners} from "../../../services/partnerServices";
