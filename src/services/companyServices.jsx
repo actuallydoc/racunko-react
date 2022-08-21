@@ -25,3 +25,9 @@ export const deleteCompany = async(companyData) => {
     const data = await res.data;
     return data;
 }
+
+export const getUserCompanies = async() => {
+    const res = await axios.get('http://localhost:5000/company/get',{ withCredentials: true })
+    const data = await res.data;
+    return data;
+}

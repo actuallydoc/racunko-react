@@ -9,10 +9,12 @@ import SelectStatus from '../Table/SelectStatus';
 import PDFDialog from '../PDFDialog/PDFDialog'
 import InvoiceInfoDialog from "../Dialogs/InvoiceDialog/InvoiceInfoDialog";
 import {getUserPartners} from "../../../services/partnerServices";
+import {getUserCompanies} from "../../../services/companyServices";
 const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,signedBase64 ,base64,Amount,SelectStatusValue, Status, Partner, Currency, refetchcb }) => {
     const [open, setOpen] = useState(false);
     const [invoiceOpen , setInvoiceOpen] = useState(false);
     const [partnerData , setPartnerData] = useState([]);
+    const [companyData , setCompanyData] = useState([]);
     const handleInvoiceOpen=()=>{
         setInvoiceOpen(true)
     }
@@ -28,6 +30,10 @@ const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,
     }
     useEffect(() => {
         setOpen(false);
+        getUserCompanies().then(res => {
+            setCompanyData(res.companies)
+        })
+
         getUserPartners().then((res)=>{
             setPartnerData(res.partners)
         })
@@ -88,7 +94,7 @@ const TableItem = ({data , InvoiceNumber, serviceDate, paymentDate, invoiceDate,
 
             </Slide>
             <div>
-                <InvoiceInfoDialog data={data} refetchcb={refetchcb} callback={handleInvoiceClose} open={invoiceOpen} partners={partnerData} />
+                <InvoiceInfoDialog data={data} refetchcb={refetchcb} callback={handleInvoiceClose} open={invoiceOpen} companies={companyData} partners={partnerData} />
             </div>
         </div>
     );

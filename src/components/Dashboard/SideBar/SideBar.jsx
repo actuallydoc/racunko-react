@@ -54,6 +54,7 @@ export default function SideBar({children}) {
      useEffect(()=>{
          fetchUserInvoices().then(res=>{
              setInvoices(res.data);
+             console.log(res.data)
          }).catch(err=>{
              console.log(err)
          })
@@ -63,14 +64,7 @@ export default function SideBar({children}) {
         console.log("refetching")
         setFetch(!fetch);
     }
-     const filterPaid = () =>{
-            return invoices.filter(invoice=>{
-                if (invoice.status === "PAID"){
-                    console.log(invoice)
-                    return invoice
-                }
-            })
-     }
+
 
      const handleAll = () => {
          toast('All')
@@ -182,9 +176,6 @@ export default function SideBar({children}) {
                 <Table refetchcb={refetchcb} data={invoices}/>
             </div>}
 
-            {paid && <div className={"pt-5 text-center pl-24"}>
-                <Table refetchcb={refetchcb} data={invoices} />
-            </div>}
 
 
 </div>

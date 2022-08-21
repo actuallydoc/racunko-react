@@ -74,7 +74,7 @@ const Login = () => {
                     autoComplete="off"
                 >
                     <TextField id="outlined-basic" name="email" label="Email" variant="outlined" onChange={onChange} />
-                    <TextField id="outlined-basic" name="password" label="Password" variant="outlined" onChange={onChange}/>
+                    <TextField id="outlined-basic" name="password" type={"password"} label="Password" variant="outlined" onChange={onChange}/>
                     <div>
                         <Button onClick={onSubmit} variant="contained" color="primary" size="large" fullWidth>Login</Button>
                     </div>

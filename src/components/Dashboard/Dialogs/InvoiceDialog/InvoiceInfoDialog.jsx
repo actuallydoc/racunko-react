@@ -13,7 +13,7 @@ import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
-import {deleteInvoice} from "../../../../services/invoiceServices";
+import {deleteInvoice, updateInvoice} from "../../../../services/invoiceServices";
 import {toast} from "react-toastify";
 const style = {
     width: 300,
@@ -33,15 +33,17 @@ const STATUS_OPTIONS = [
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
+const InvoiceInfoDialog = ({open , callback, data, partners, companies, refetchcb}) => {
 
     const [form , setForm ] = useState(
         {
-             stRacuna: data.stRacuna,
+            id: data.id,
+            company: data.companyId,
+            stRacuna: data.stRacuna,
             datumIzdaje: data.datumIzdaje,
             datumStoritve: data.datumStoritve,
             datumPlacila: data.datumPlacila,
-           partnerId: data.partnerId,
+            partnerId: data.partnerId,
             status: data.status,
             services: JSON.parse(data.services)
         }
@@ -50,6 +52,14 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
     const [serviceDate , setServiceDate] = useState(form.datumStoritve)
     const [paymentDate, setPaymentDate] = useState(form.datumPlacila)
     const handleSave=()=>{
+        updateInvoice(form).then(res=> {
+                toast.success('Invoice updated')
+                refetchcb()
+                callback()
+        }).catch(err=>{
+            toast.error('Error updating invoice')
+        })
+
         console.log("Handle save")
     }
     const handleDelete = ()=>{
@@ -65,19 +75,25 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
             console.log(err)
         })
   }
-    useEffect(()=>{
-      console.log(partners)
-    },[])
+    const handleServiceChange = (e, service, index) => {
+        const services = form.services;
+        services[index].service = service;
+        setForm({...form, services: services});
+        console.log(
+            'Service changed: ' + service + ' at index: ' + index
+        )
 
-    
-
-        const handlePartnerChange = (e)=>{
+    }
+    const handlePartnerChange = (e)=>{
         setForm({...form, partner: e.target.value})
         console.log(form)}
-
+    const handleCompanyChange = (e)=>{
+        setForm({...form, company: e.target.value})
+        console.log(form)
+    }
     const handleRemoveService = (service)=>{
-        const newServices = form.services.filter(s=>s.id !== service.id)
-        setForm({...form, services: newServices})
+        const newServices = form.services.pop(form.services[form.services.length])
+        setForm({...form, services: form.services})
     }
     const handleAddService = ()=>{
         console.log('Add service')
@@ -107,7 +123,9 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
         setServiceDate(data.datumStoritve)
         setPaymentDate(data.datumPlacila)
     }
-  
+        useEffect(()=>{
+            console.log(data.companyId);
+        }, []);
     return (
         <div>
           <Dialog
@@ -121,6 +139,24 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                 <DialogContent>
                     <DialogActions>
                         <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Company</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-autowidth-label"
+                                id="demo-simple-select-autowidth"
+                                onChange={handleCompanyChange}
+                                autoWidth
+                                defaultValue={data.companyId}
+                                label="Partner"
+                            >
+                                {companies?.map((company)=>{
+                                return (
+                                  <MenuItem value={company.id}>{company.companyName}</MenuItem>
+                                )
+                                })}
+                            </Select>
+
+                        </FormControl>
+                        <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Partner</InputLabel>
                             <Select
                                 labelId="demo-simple-select-autowidth-label"
@@ -131,9 +167,9 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                                 label="Partner"
                             >
                                 {partners?.map((partner)=>{
-                                return (
-                                  <MenuItem value={partner.id}>{partner.partnerName}</MenuItem>
-                                )
+                                    return (
+                                        <MenuItem value={partner.id}>{partner.partnerName}</MenuItem>
+                                    )
                                 })}
                             </Select>
 
@@ -193,8 +229,8 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                             id="outlined-number"
                             label="Invoice Number"
                             type="number"
-                            defaultValue={data.stRacuna}
-                            onChange={(e)=>setForm({...form, stRacuna: e.target.value})}
+                            defaultValue={parseInt(data.stRacuna)}
+                            onChange={(e)=>setForm({...form, stRacuna: parseInt(e.target.value)})}
                             InputLabelProps={{
                                 shrink: true,
                             }}
@@ -202,10 +238,9 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                     </div>
 
                     <DialogContentText id="alert-dialog-slide-description">
-
                     </DialogContentText>
                 <div className={"flex-col"}>
-                    {form?.services.map((service)=>{
+                    {form?.services.map((service, index)=>{
                         return (
                     <div className={"flex space-x-5 pt-5"}>
                         <div>
@@ -213,8 +248,12 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                                 id="filled-multiline-flexible"
                                 label="Description"
                                 multiline
-                                value={service[0]}
+                                defaultValue={service[0]}
                                 variant="filled"
+                                onChange={(e) => {
+                                    handleServiceChange(e, service[0], index)
+                                }
+                                }
                             />
                         </div>
                         <div>
@@ -222,16 +261,25 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                                 id="filled-multiline-flexible"
                                 label="Quantity"
                                 maxRows={20}
-                                value={service[1]}
+                                defaultValue={service[1]}
                                 variant="filled"
+                                onChange={(e) => {
+
+                                    handleServiceChange(e, service[1], index)
+                                }
+                                }
                             />
                         </div>
                         <div>
                             <TextField
                                 id="filled-multiline-flexible"
                                 label="Price"
-                                value={service[2]}
+                                defaultValue={service[2]}
                                 variant="filled"
+                                onChange={(e) => {
+                                    handleServiceChange(e, service[2], index)
+                                }
+                                }
                             />
                         </div>
 
@@ -244,7 +292,7 @@ const InvoiceInfoDialog = ({open , callback, data, partners, refetchcb}) => {
                         <Button size={"small"} onClick={handleAddService} variant={"contained"} color={"primary"}>Add service</Button>
                     </div>
                     <div>
-                        <Button size={"small"} onClick={handleRemoveService} variant={"contained"} color={"error"}>Remove ALL Services</Button>
+                        <Button size={"small"} onClick={handleRemoveService} variant={"contained"} color={"error"}>Remove Service</Button>
                     </div>
 
                 </div>
