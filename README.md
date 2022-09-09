@@ -6,12 +6,12 @@ Technologies used: JavaScript , Prisma, postgresql, ExpressJS, TailwindCSS, Reac
 This is mostly used for learning and is not good for production since there are basic implementation's for security. (Password Hashing, JWT);
 
 
-Functionality:
-Creating partners.[✔]
-Creating companies[✔]
-Creating PDF's[✔]
-Custom profile picture[✔]
-Custom company sign[✔]
-Custom PDF Signing[✔]
-PDF VIEWER[✔]
-Creating invoices[x] only with postman or other clients! 
+# Functionality:
+1.Creating partners.[✔]
+1.Creating companies[✔]
+3.Creating PDF's[✔]
+4.Custom profile picture[✔]
+5.Custom company sign[✔]
+6.Custom PDF Signing[✔]
+7.DF VIEWER[✔]
+8.Creating invoices[x] only with postman or other clients! 
