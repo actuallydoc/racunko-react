@@ -13,5 +13,5 @@ This is mostly used for learning and is not good for production since there are 
 4.Custom profile picture[✔]
 5.Custom company sign[✔]
 6.Custom PDF Signing[✔]
-7.DF VIEWER[✔]
+7.PDF VIEWER[✔]
 8.Creating invoices[❌] only with postman or other clients! 
